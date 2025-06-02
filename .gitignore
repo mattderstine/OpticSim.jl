@@ -54,3 +54,5 @@ Manifest.toml
 
 # Cloud config file
 src/Cloud/amlconf
+
+.DS_Store
