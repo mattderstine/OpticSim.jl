@@ -30,6 +30,23 @@ global currentUserGrid = nothing
 global activeFigureView = false
 
 
+function getFilePath(directory, fileNameStub)
+    name = joinpath(directory, fileNameStub * ".png")
+    n = 1
+    while isfile(name)
+        name = joinpath(directory, fileNameStub * "-" * string(n,  pad=3) * ".png")
+        n += 1
+    end
+    return name
+end
+
+function saveFigure(dir, fileNameStub, fig)
+    filename = getFilePath(dir, fileNameStub)
+    Makie.save(filename, fig)
+    display(currentFigure)
+end
+
+
 function FigureView(; figureName = string(numNextFigPos), fileNameStub = nothing, dir = nothing,  activeButtonColor = Makie.RGBf0(0.8, 0.94, 0.8), resolution = defaultResolution)
     global logo
     global currentUserGrid
@@ -69,12 +86,12 @@ function FigureView(; figureName = string(numNextFigPos), fileNameStub = nothing
     #  normally the items would be defined and then included in the constuctor. Some of the Makie objects have unexpected actions 
     #  when being assigned, so assign directly onto the FigureView fields.
     
-    figc[1,1] = curFigView.statusGrid = Makie.GridLayout(tellwidth = true, tellheight=false)
+    figc[1,1] = curFigView.statusGrid = Makie.GridLayout(tellwidth = true, tellheight=true)
 
-    curFigView.statusGrid[1, 1] = curFigView.buttonGrid = Makie.GridLayout(tellwidth = true, tellheight=false)
-    curFigView.statusGrid[2, 1] = curFigView.userGrid = Makie.GridLayout(tellwidth = true, tellheight=false)
+    curFigView.statusGrid[1, 1] = curFigView.buttonGrid = Makie.GridLayout(tellwidth = true, tellheight=true)
+    curFigView.statusGrid[2, 1] = curFigView.userGrid = Makie.GridLayout(tellwidth = true, tellheight=true)
     currentUserGrid=curFigView.userGrid
-    curFigView.statusGrid[3, 1] = curFigView.utilGrid = Makie.GridLayout(tellwidth = true, tellheight=false)   
+    curFigView.statusGrid[3, 1] = curFigView.utilGrid = Makie.GridLayout(tellwidth = true, tellheight=true)   
 
     figc[1,2] = curFigView.workingGrid = Makie.GridLayout(tellwidth = true, tellheight=true)
     curFigView.saveRegion = figc #workinggrid
